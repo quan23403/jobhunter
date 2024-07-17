@@ -1,6 +1,9 @@
 package vn.hoidanit.jobhunter.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +14,7 @@ import java.util.List;
 
 import vn.hoidanit.jobhunter.domain.User;
 import vn.hoidanit.jobhunter.service.UserService;
+import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 
 @RestController
 public class UserController {
@@ -21,50 +25,46 @@ public class UserController {
         this.userService = userService;
     }
 
-    // @GetMapping("/user/create")
+    // @GetMapping("/users/create")
 
-    @GetMapping("/user")
-    public List<User> getAllUser() {
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getAllUser() {
 
         // User user = new User();
         // user.setEmail("quan23403@gmail.com");
         // user.setName("HMQ");
         // user.setPassword("123456");
         List<User> users = this.userService.handleGetAllUser();
-        return users;
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
-    @GetMapping("/user/{id}")
-    public User getUserById(@PathVariable("id") long id) {
-
-        // User user = new User();
-        // user.setEmail("quan23403@gmail.com");
-        // user.setName("HMQ");
-        // user.setPassword("123456");
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable("id") long id) {
         User user = this.userService.handleGetUserById(id);
-        return user;
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
-    @PostMapping("/user")
-    public User createNewUser(@RequestBody User user) {
-
-        // User user = new User();
-        // user.setEmail("quan23403@gmail.com");
-        // user.setName("HMQ");
-        // user.setPassword("123456");
+    @PostMapping("/users")
+    public ResponseEntity<User> createNewUser(@RequestBody User user) {
         User newUser = this.userService.handleCreateUser(user);
-        return newUser;
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
-    @DeleteMapping("/user/{id}")
-    public String deleteUser(@PathVariable("id") long id) {
+
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable("id") long id) 
+            throws IdInvalidException {
+        if(id >= 1500) {
+            throw new IdInvalidException("Id khong lon hon 1501");
+        }
         this.userService.handleDeleteUser(id);
-        return "Delete user";
+        return ResponseEntity.status(HttpStatus.OK).body("Delete Success");
     }
 
-    @PutMapping("/user")
-    public User updateUser(@RequestBody User user) {
-
-        return this.userService.handleUpdateUser(user);
+    @PutMapping("/users")
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
+        User updateUser = this.userService.handleUpdateUser(user);
+        return ResponseEntity.status(HttpStatus.OK).body(updateUser);
     }
 }
