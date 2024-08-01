@@ -31,11 +31,6 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUser() {
-
-        // User user = new User();
-        // user.setEmail("quan23403@gmail.com");
-        // user.setName("HMQ");
-        // user.setPassword("123456");
         List<User> users = this.userService.handleGetAllUser();
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
@@ -61,7 +56,7 @@ public class UserController {
             throw new IdInvalidException("Id khong lon hon 1501");
         }
         this.userService.handleDeleteUser(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Delete Success");
+        return ResponseEntity.status(HttpStatus.OK).body("Delete Sucess");
     }
 
     @PutMapping("/users")

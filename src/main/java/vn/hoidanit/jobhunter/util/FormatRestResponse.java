@@ -8,6 +8,9 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.servlet.http.HttpServletResponse;
 import vn.hoidanit.jobhunter.domain.RestResponse;
 
@@ -27,13 +30,17 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse = ((ServletServerHttpResponse) response).getServletResponse();
         int status = servletResponse.getStatus();
         RestResponse<Object> res = new RestResponse<Object>();
+        if (body instanceof String) {
+            return body;
+        }
         res.setStatusCode(status);
         if (status >= 400) {
             return body;
         } else {
+            // Kiểm tra nếu body là kiểu String
             res.setData(body);
             res.setMessage("Call API Success");
+            return res;
         }
-        return res;
     }
 }
