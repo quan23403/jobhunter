@@ -7,8 +7,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import vn.hoidanit.jobhunter.domain.User;
 import vn.hoidanit.jobhunter.domain.dto.Meta;
+import vn.hoidanit.jobhunter.domain.dto.ResCreateUserDTO;
+import vn.hoidanit.jobhunter.domain.dto.ResUpdateUserDTO;
+import vn.hoidanit.jobhunter.domain.dto.ResUserDTO;
 import vn.hoidanit.jobhunter.domain.dto.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.repository.UserRepository;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -43,7 +47,18 @@ public class UserService {
         mt.setTotal(pageUser.getTotalElements());
 
         rs.setMeta(mt);
-        rs.setResult(pageUser.getContent());
+        List<ResUserDTO> listUser = pageUser.getContent()
+                .stream().map(item -> new ResUserDTO(
+                    item.getId(),
+                    item.getEmail(),
+                    item.getName(),
+                    item.getGender(),
+                    item.getAddress(),
+                    item.getAge(),
+                    item.getUpdatedAt(),
+                    item.getCreatedAt()
+                )).collect(Collectors.toList());
+        rs.setResult(listUser);
 
         return rs;
     }
@@ -62,5 +77,45 @@ public class UserService {
 
     public User handleGetUserByUsername(String username) {
         return this.userRepository.findByEmail(username);
+    }
+
+    public boolean isEmailExist(String email) {
+        return this.userRepository.existsByEmail(email);
+    }
+
+    public ResCreateUserDTO convertToResCreateUserDTO(User user) {
+        ResCreateUserDTO res = new ResCreateUserDTO();
+        res.setId(user.getId());
+        res.setEmail(user.getEmail());
+        res.setAddress(user.getAddress());
+        res.setName(user.getName());
+        res.setCreatedAt(user.getCreatedAt());
+        res.setGender(user.getGender());
+        res.setAge(user.getAge());
+        return res;
+    }
+
+    public ResUserDTO convertToResUserDTO(User user) {
+        ResUserDTO res = new ResUserDTO();
+        res.setId(user.getId());
+        res.setEmail(user.getEmail());
+        res.setAddress(user.getAddress());
+        res.setName(user.getName());
+        res.setUpdatedAt(user.getUpdatedAt());
+        res.setCreatedAt(user.getCreatedAt());
+        res.setGender(user.getGender());
+        res.setAge(user.getAge());
+        return res;
+    }
+
+    public ResUpdateUserDTO convertToResUpdateUserDTO(User user) {
+        ResUpdateUserDTO res = new ResUpdateUserDTO();
+        res.setId(user.getId());
+        res.setAddress(user.getAddress());
+        res.setName(user.getName());
+        res.setUpdatedAt(user.getUpdatedAt());
+        res.setGender(user.getGender());
+        res.setAge(user.getAge());
+        return res;
     }
 }
