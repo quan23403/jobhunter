@@ -31,9 +31,8 @@ public class Company {
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String description;
-
+    
     private String address;
-
     private String logo;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
