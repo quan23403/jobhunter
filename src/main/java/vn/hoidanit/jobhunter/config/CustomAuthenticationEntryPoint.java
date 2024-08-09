@@ -14,7 +14,7 @@ import java.util.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import vn.hoidanit.jobhunter.domain.RestResponse;
+import vn.hoidanit.jobhunter.domain.response.RestResponse;
 
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
