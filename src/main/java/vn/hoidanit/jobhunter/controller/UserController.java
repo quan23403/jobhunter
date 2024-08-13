@@ -39,8 +39,6 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // @GetMapping("/users/create")
-
     @GetMapping("/users")
     @ApiMessage("get all users")
     public ResponseEntity<ResultPaginationDTO> getAllUser(
