@@ -60,8 +60,8 @@ public class UserService {
         List<ResUserDTO> listUser = pageUser.getContent()
                 .stream().map(item -> new ResUserDTO(
                     item.getId(),
-                    item.getEmail(),
                     item.getName(),
+                    item.getEmail(),
                     item.getGender(),
                     item.getAddress(),
                     item.getAge(),
