@@ -8,6 +8,9 @@ import jakarta.validation.Valid;
 import vn.hoidanit.jobhunter.domain.Company;
 import vn.hoidanit.jobhunter.domain.response.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.service.CompanyService;
+import vn.hoidanit.jobhunter.util.annotation.ApiMessage;
+
+import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 
@@ -61,4 +65,11 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.OK).body("Delete Sucess");
     }
 
+    @GetMapping("/companies/{id}")
+    @ApiMessage("get company by id")
+    public ResponseEntity<Company> getCompanyById(@PathVariable("id") long id) {
+        Optional<Company> company = this.companyService.getCompanyById(id);
+        return ResponseEntity.ok().body(company.get());
+    }
+    
 }
