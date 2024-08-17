@@ -52,14 +52,14 @@ public class RoleController {
         }
 
         // check name
-        if (this.roleService.existByName(role.getName())) {
-            throw new IdInvalidException("Role voi name = " + role.getName() + " da ton tai");
-        }
+        // if (this.roleService.existByName(role.getName())) {
+        //     throw new IdInvalidException("Role voi name = " + role.getName() + " da ton tai");
+        // }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.roleService.updateRole(role));
+        return ResponseEntity.ok().body(this.roleService.updateRole(role));
     }
 
-    @DeleteMapping("/roles/id")
+    @DeleteMapping("/roles/{id}")
     @ApiMessage("Delete a role")
     public ResponseEntity<Void> deleteRole(@PathVariable("id") long id) throws IdInvalidException {
         // check id
@@ -77,4 +77,13 @@ public class RoleController {
         return ResponseEntity.ok().body(this.roleService.getRoles(spec, pageable));
     }
 
+    @GetMapping("/roles/{id}")
+    @ApiMessage("Get role by id")
+    public ResponseEntity<Role> getById(@PathVariable("id") long id) throws IdInvalidException {
+        Role role = this.roleService.getRoleById(id);
+        if(role == null) {
+            throw new IdInvalidException("Resume voi id = " + id + " khong ton tai");
+        }
+        return ResponseEntity.ok().body(role);
+    }
 }

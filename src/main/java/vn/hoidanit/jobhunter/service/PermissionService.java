@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import jakarta.validation.Valid;
 import vn.hoidanit.jobhunter.domain.Permission;
 import vn.hoidanit.jobhunter.domain.response.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.repository.PermissionRepository;
@@ -71,5 +72,15 @@ public class PermissionService {
 
         return rs;
     }
+
+    // public boolean isSameName(Permission permission) {
+    //     Permission permissionDB = this.getPermissionById(permission.getId());
+    //     if(permissionDB != null) {
+    //         if(permissionDB.getName().equals(permission.getName())) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
 }   
 

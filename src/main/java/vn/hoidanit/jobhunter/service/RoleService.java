@@ -25,7 +25,7 @@ public class RoleService {
     }
 
     public boolean existByName(String roleName) {
-        return this.roleRepository.existByName(roleName);
+        return this.roleRepository.existsByName(roleName);
     }
 
     public Role getRoleById(long id) {
