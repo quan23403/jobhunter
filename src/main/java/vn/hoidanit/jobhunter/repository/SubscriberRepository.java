@@ -5,10 +5,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import vn.hoidanit.jobhunter.domain.Subscriber;
+import java.util.List;
+
 
 
 @Repository
 public interface SubscriberRepository extends JpaRepository<Subscriber, Long>, JpaSpecificationExecutor<Subscriber> {
     boolean existsByEmail(String email);
     Subscriber findById(long id);
+    Subscriber findByEmail(String email);
 }
