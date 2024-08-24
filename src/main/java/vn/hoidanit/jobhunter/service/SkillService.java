@@ -16,12 +16,12 @@ public class SkillService {
         this.skillRepository = skillRepository;
     }
 
-    public boolean isNameExist(String name) {
-        return this.skillRepository.existsByName(name);
-    }
-
     public Skill createNewSkill(Skill skill) {
         return this.skillRepository.save(skill);
+    }
+
+    public boolean isNameExist(String name) {
+        return this.skillRepository.existsByName(name);
     }
 
     public Skill getSkillById(long id) {

@@ -51,11 +51,6 @@ public class RoleController {
             throw new IdInvalidException("Role voi id = " + role.getId() + " khong ton tai");
         }
 
-        // check name
-        // if (this.roleService.existByName(role.getName())) {
-        //     throw new IdInvalidException("Role voi name = " + role.getName() + " da ton tai");
-        // }
-
         return ResponseEntity.ok().body(this.roleService.updateRole(role));
     }
 
@@ -72,7 +67,7 @@ public class RoleController {
 
     @GetMapping("/roles")
     @ApiMessage("Get all role")
-    public ResponseEntity<ResultPaginationDTO> getPermissions(
+    public ResponseEntity<ResultPaginationDTO> getAllRole(
             @Filter Specification<Role> spec, Pageable pageable) {
         return ResponseEntity.ok().body(this.roleService.getRoles(spec, pageable));
     }
@@ -81,8 +76,8 @@ public class RoleController {
     @ApiMessage("Get role by id")
     public ResponseEntity<Role> getById(@PathVariable("id") long id) throws IdInvalidException {
         Role role = this.roleService.getRoleById(id);
-        if(role == null) {
-            throw new IdInvalidException("Resume voi id = " + id + " khong ton tai");
+        if (role == null) {
+            throw new IdInvalidException("Role voi id = " + id + " khong ton tai");
         }
         return ResponseEntity.ok().body(role);
     }

@@ -28,9 +28,7 @@ public class RoleService {
         return this.roleRepository.existsByName(roleName);
     }
 
-    public Role getRoleById(long id) {
-        return this.roleRepository.findById(id);
-    }
+
 
     public Role createRole(Role role) {
         if(role.getPermissions() != null) {
@@ -66,6 +64,10 @@ public class RoleService {
 
     public void deleteRole(long id) {
         this.roleRepository.deleteById(id);
+    }
+
+    public Role getRoleById(long id) {
+        return this.roleRepository.findById(id);
     }
 
     public ResultPaginationDTO getRoles(Specification<Role> spec, Pageable pageable) {
