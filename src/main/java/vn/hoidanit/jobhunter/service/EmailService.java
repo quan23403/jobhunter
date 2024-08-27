@@ -15,7 +15,6 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import vn.hoidanit.jobhunter.domain.Job;
 import vn.hoidanit.jobhunter.repository.JobRepository;
 
 @Service
