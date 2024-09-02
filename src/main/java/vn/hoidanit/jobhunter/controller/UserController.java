@@ -1,5 +1,7 @@
 package vn.hoidanit.jobhunter.controller;
 
+import java.util.Map;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -14,16 +16,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nimbusds.jose.shaded.gson.JsonObject;
 import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
 
 import vn.hoidanit.jobhunter.domain.User;
+import vn.hoidanit.jobhunter.domain.request.PasswordChangeRequest;
 import vn.hoidanit.jobhunter.domain.response.ResCreateUserDTO;
 import vn.hoidanit.jobhunter.domain.response.ResUpdateUserDTO;
 import vn.hoidanit.jobhunter.domain.response.ResUserDTO;
 import vn.hoidanit.jobhunter.domain.response.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.service.UserService;
+import vn.hoidanit.jobhunter.util.SecurityUtil;
 import vn.hoidanit.jobhunter.util.annotation.ApiMessage;
 import vn.hoidanit.jobhunter.util.error.IdInvalidException;
 
@@ -93,5 +98,31 @@ public class UserController {
             throw new IdInvalidException("User với id = " + user.getId() + " không tồn tại");
         }
         return ResponseEntity.status(HttpStatus.OK).body(this.userService.convertToResUpdateUserDTO(updateUser));
+    }
+
+    @PostMapping("/changePassword")
+    @ApiMessage("Change password success")
+    public ResponseEntity<ResUpdateUserDTO> changePassword(@RequestBody PasswordChangeRequest request)
+            throws IdInvalidException {
+        // Log the entire request body
+        // System.out.println("Received JSON: " + payload);
+        if (request == null) {
+            throw new IdInvalidException("Thay doi mat khau that bai");
+        }
+        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
+        User user = this.userService.handleGetUserByUsername(email);
+        String currentPassword = request.getCurrentPassword();
+        String newPassword = request.getNewPassword();
+        if (currentPassword.equals(newPassword)) {
+            throw new IdInvalidException("Mat khau moi khong trung mat khau cu");
+        }
+        // currentPassword = this.passwordEncoder.encode(currentPassword);
+        if (!this.passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new IdInvalidException("Mat khau sai");
+        }
+        newPassword = this.passwordEncoder.encode(newPassword);
+        user.setPassword(newPassword);
+        this.userService.handleUpdateUser(user);
+        return ResponseEntity.status(HttpStatus.OK).body(this.userService.convertToResUpdateUserDTO(user));
     }
 }
